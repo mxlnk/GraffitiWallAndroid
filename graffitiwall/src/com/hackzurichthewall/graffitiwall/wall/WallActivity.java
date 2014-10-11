@@ -1,6 +1,5 @@
 package com.hackzurichthewall.graffitiwall.wall;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -11,12 +10,13 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.BeaconManager;
@@ -31,7 +31,7 @@ import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.Conten
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
-import com.hackzurichthewall.model.TextComment;
+import com.hackzurichthewall.utils.FontFactory;
 
 /**
  * This is the main activity. Basically contains a list with the last posted
@@ -66,6 +66,10 @@ public class WallActivity extends Activity {
 			STREAM = savedInstanceState.getInt(STREAM_ID, 731);
 		}
 		
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(R.layout.layout_actionbar);
+		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_title);
+		actionBarTitleTv.setTypeface(FontFactory.getTypeface_NexaRustScriptL0(this));
 		
 		setContentView(R.layout.activity_wall); // setting content view to
 												// default layout

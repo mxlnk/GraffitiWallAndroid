@@ -7,7 +7,15 @@
     tools:ignore="MergeRootFrame"
     android:background="@drawable/chalkboard_black" >
 
-    
+     <View
+        android:layout_width="fill_parent"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_height="1dip"        
+        android:background="#FFFFFF"
+        android:layout_marginTop="5dp"
+         />
+     
     <ListView 
         android:id="@+id/lv_wall_list"
         android:layout_width="match_parent"
