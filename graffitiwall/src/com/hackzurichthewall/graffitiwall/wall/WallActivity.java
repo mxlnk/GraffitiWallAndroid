@@ -6,6 +6,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -23,7 +24,10 @@ import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.main.BeaconScannerService;
 import com.hackzurichthewall.graffitiwall.main.GlobalState;
 import com.hackzurichthewall.graffitiwall.networking.tasks.ChallengeTask;
+import com.hackzurichthewall.graffitiwall.networking.tasks.DownloadImageTask;
+import com.hackzurichthewall.graffitiwall.networking.tasks.GetStreamTask;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
+import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.ContentType;
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
@@ -50,6 +54,9 @@ public class WallActivity extends Activity {
 	private StreamListViewAdapter mListAdapter;
 	private ImageButton mTakePicture;
 	private ImageButton mWriteComment;
+	private List<AbstractContent> items;
+	
+	private ProgressDialog mDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,31 +84,13 @@ public class WallActivity extends Activity {
 
 		this.mCommentList = (ListView) findViewById(R.id.lv_wall_list);
 
-		List<AbstractContent> items = new ArrayList<AbstractContent>();
-		PictureComment pic0 = new PictureComment();
-		PictureComment pic1 = new PictureComment();
-		Bitmap icon = BitmapFactory.decodeResource(this.getResources(),
-				R.drawable.model02);
-
-		pic0.setmPicture(icon);
-		pic1.setmPicture(icon);
-
-		// TextComment
-		TextComment txtComment0 = new TextComment();
-		txtComment0.setComment("Where is my bacon?");
 		
-		TextComment txtComment1 = new TextComment();
-		txtComment1.setComment("Go to HackZurich they said...\n There will be wifi they said...");
-
-		items.add(pic0);
-		items.add(txtComment1);
-		items.add(pic1);
-		items.add(txtComment0);
-		items.add(pic0);
-
-		mListAdapter = new StreamListViewAdapter(this, R.id.lv_wall_list, items);
-
-		mCommentList.setAdapter(mListAdapter);
+		// setting up progress dialog to show loading
+		this.mDialog = new ProgressDialog(this);
+		this.mDialog.setMessage(getString(R.string.dialog_wait_for_stream));
+		this.mDialog.show();
+		
+		updateList();
 
 		this.mTakePicture = (ImageButton) findViewById(R.id.ib_take_picture);
 		this.mTakePicture.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +113,43 @@ public class WallActivity extends Activity {
 		
 		ChallengeTask.getChallengeAsync();
 
+	}
+
+	private void updateList() {
+		
+		new GetStreamTask() {
+
+			@Override
+			protected void onPostExecute(List<AbstractContent> result) {
+				items = result;
+				if (result != null) {
+					mListAdapter = new StreamListViewAdapter(getApplicationContext(), R.layout.list_item_comment, items);
+					mCommentList.setAdapter(mListAdapter);
+				}
+				
+				for (int i = 0; i < items.size(); i++) {
+					AbstractContent item = items.get(i);
+					if (item.getmType() == ContentType.PICTURE_COMMENT) {
+						PictureComment pComment = (PictureComment) item;
+						new DownloadImageTask(pComment) {
+							
+							@Override
+							public void onPostExecute(Bitmap result) {
+								mListAdapter.notifyDataSetChanged();
+								
+							}
+							
+						}.execute(pComment.getmImageUrl());
+					}
+				}
+				
+				mDialog.dismiss();
+			}
+			
+		}.execute(STREAM);
+		
+		
+		
 	}
 
 	@Override

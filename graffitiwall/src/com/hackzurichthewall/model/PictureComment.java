@@ -32,6 +32,20 @@ public class PictureComment extends AbstractContent {
 	}
 	
 	
+	public PictureComment(JSONObject json) {
+		this.setmType(ContentType.PICTURE_COMMENT);
+		
+		if (json != null) {
+			try {
+				this.mImageUrl = json.getString("photo");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
 	@Override
 	public void fillViewHolder(ViewHolder holder) {
 		ImageView imageView = holder.getmPicture();
