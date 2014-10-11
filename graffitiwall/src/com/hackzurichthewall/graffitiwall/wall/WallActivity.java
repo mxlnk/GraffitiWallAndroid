@@ -6,6 +6,8 @@ import java.util.List;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
@@ -18,6 +20,7 @@ import com.estimote.sdk.Region;
 import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.model.AbstractContent;
+import com.hackzurichthewall.model.PictureComment;
 import com.hackzurichthewall.model.TextComment;
 
 
@@ -60,8 +63,14 @@ public class WallActivity extends Activity {
 			TextComment comment = new TextComment();
 			comment.setComment("Comment " + i);
 			comments.add(comment);
+			PictureComment pComment = new PictureComment();
+			Bitmap bmp = BitmapFactory.decodeResource(this.getResources(),
+                    R.drawable.ic_launcher);
+			pComment.setmPicture(bmp);
+			comments.add(pComment);
 		}
 		
+		// setting the list adapter and connect it with the list
 		this.mListAdapter = new StreamListViewAdapter(this, R.layout.list_item_comment, comments);
 		this.mCommentList.setAdapter(mListAdapter);
 		
