@@ -1,7 +1,49 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hackzurichthewall.graffitiwall.WallActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame" >
+
+    
+    <ListView 
+        android:id="@+id/lv_wall_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/ll_insert_bar"
+        
+        />
+    
+    
+    <LinearLayout
+        android:id="@+id/ll_insert_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:weightSum="2"
+        >
+        
+        <ImageButton 
+            android:id="@+id/ib_take_picture"
+            android:contentDescription="@string/content_desc_take_pictrue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            />
+        
+        <ImageButton 
+            android:id="@+id/ib_write_comment"
+            android:contentDescription="@string/content_desc_write_comment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            />
+        
+    </LinearLayout>
+    
+
+</RelativeLayout>

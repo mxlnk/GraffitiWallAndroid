@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="content_desc_take_pictrue">Take picture with camera.</string>
+    <string name="content_desc_write_comment">Write comment.</string>
+    <string name="content_desc_list_item_picture">List entry image.</string>
+    
+</resources>
