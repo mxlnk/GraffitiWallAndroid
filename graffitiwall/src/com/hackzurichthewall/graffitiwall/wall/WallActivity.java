@@ -1,14 +1,15 @@
 package com.hackzurichthewall.graffitiwall.wall;
 
-import java.util.ArrayList;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -19,7 +20,6 @@ import com.hackzurichthewall.graffitiwall.main.BeaconScannerService;
 import com.hackzurichthewall.graffitiwall.main.GlobalState;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.images.ImageActivity;
-import com.hackzurichthewall.model.AbstractContent;
 
 
 /**
@@ -37,6 +37,8 @@ public class WallActivity extends Activity {
 	private ListView mCommentList;
 	private StreamListViewAdapter mListAdapter;
 	private ImageButton mTakePicture;
+	private ImageButton mWriteComment;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,18 @@ public class WallActivity extends Activity {
 				openCamera();
 			}
 		});
+		
+		this.mWriteComment = (ImageButton)findViewById(R.id.ib_write_comment);
+		this.mWriteComment.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showCommentDialog();
+				
+			}
+		});
+		
+		
 	}
 		
 	// TODO stop service probably here
@@ -80,5 +94,14 @@ public class WallActivity extends Activity {
 	private void openCamera() {
 		Intent intent = new Intent(this, ImageActivity.class);
 		startActivity(intent);
+	}
+	
+	
+	/**
+	 * Shows the "Comment-Dialog" that allows to upload comments.
+	 */
+	private void showCommentDialog() {
+		DialogFragment dialog = new UploadCommentFragment();
+		dialog.show(getFragmentManager(), "UploadCommentDialog");
 	}
 }
