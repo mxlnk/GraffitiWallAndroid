@@ -23,7 +23,11 @@ import com.estimote.sdk.BeaconManager;
 import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.main.BeaconScannerService;
 import com.hackzurichthewall.graffitiwall.main.GlobalState;
+
 import com.hackzurichthewall.graffitiwall.networking.tasks.ChallengeTask;
+
+
+
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;

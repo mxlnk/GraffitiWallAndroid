@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,15 +25,18 @@ import android.provider.MediaStore.MediaColumns;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hackzurichthewall.graffitiwall.R;
+import com.hackzurichthewall.graffitiwall.networking.tasks.CreatePostTask;
+import com.hackzurichthewall.graffitiwall.networking.tasks.UploadImageTask;
 
 /**
  * Activity that allows taking pictures with the camera or loading one from gallery.
  * 
  * @author Johannes Glöckle
  */
-public class ImageActivity extends Activity {
+public class ImageActivity extends Activity implements UploadImageTask.AsyncResponse {
 
 	private final int REQUEST_CAMERA = 200;
 	private final int SELECT_FILE = 100;
@@ -44,6 +49,7 @@ public class ImageActivity extends Activity {
 	private ImageView mPreview;
 	
 	private Bitmap mCurrentImage = null;
+	private String mCurrentPath = null;
 	
 	
 	
@@ -63,6 +69,7 @@ public class ImageActivity extends Activity {
 			@Override
 			public void onClick(View v) {
 				mCurrentImage = null;
+				mCurrentPath = null;
 				takePicture();
 			}
 		});
@@ -72,7 +79,12 @@ public class ImageActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				if (mCurrentPath == null) {
+					Toast.makeText(getApplicationContext(), getString(R.string.error_no_image_path), 
+											Toast.LENGTH_LONG).show();
+				} else {
+					uploadImage();
+				}
 				
 			}
 		});
@@ -109,6 +121,9 @@ public class ImageActivity extends Activity {
 					if (rotation != 0) {
 						bm = rotateBitmap(bm, rotation);
 					}
+					
+					// setting the file path to be able tu upload the image
+					this.mCurrentPath = f.getAbsolutePath();
 
 					// bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
 					mPreview.setImageBitmap(bm);
@@ -147,6 +162,11 @@ public class ImageActivity extends Activity {
 				if (rotation != 0) {
 					bm = rotateBitmap(bm, rotation);
 				}
+				
+				// saving the image's path
+				this.mCurrentPath = tempPath;
+				
+				
 				this.mCurrentImage = bm;
 				mPreview.setImageBitmap(bm);
 			}
@@ -257,6 +277,21 @@ public class ImageActivity extends Activity {
 				 									bmp.getHeight(), matrix, true);
 		 bmp.recycle();
 		 return rotatedBitmap;
+	 }
+
+
+	 private void uploadImage() {
+		 new UploadImageTask(this).execute(mCurrentPath);
+	 }
+	 
+	 
+	 @Override
+	 public void uploadPost(JSONObject post) {
+		 CreatePostTask task = new CreatePostTask();
+		
+		 task.setmStreamId(731);
+		
+		 task.execute(post);
 	 }
 	
 
