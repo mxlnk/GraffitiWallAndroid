@@ -1,5 +1,7 @@
 package com.hackzurichthewall.model;
 
+import org.json.JSONObject;
+
 import android.graphics.Bitmap;
 import android.widget.ImageView;
 
@@ -31,6 +33,12 @@ public class PictureComment extends AbstractContent {
 		imageView.setImageBitmap(mPicture);
 
 	}
+	
+	@Override
+	public JSONObject toJSON() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 	/**
@@ -47,5 +55,8 @@ public class PictureComment extends AbstractContent {
 	public void setmPicture(Bitmap mPicture) {
 		this.mPicture = mPicture;
 	}
+
+
+
 	
 }

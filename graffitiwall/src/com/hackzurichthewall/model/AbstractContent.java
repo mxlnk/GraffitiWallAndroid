@@ -1,5 +1,7 @@
 package com.hackzurichthewall.model;
 
+import org.json.JSONObject;
+
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.ContentType;
 
@@ -18,7 +20,18 @@ public abstract class AbstractContent {
 	// add here further main information here like author...
 	
 	
+	/**
+	 * Forces all subclasses to implement a method that fills the given view holder.
+	 * @param holder given holder
+	 */
 	public abstract void fillViewHolder(StreamListViewAdapter.ViewHolder holder);
+	
+	
+	/**
+	 * Classes have to provide a method to convert them to a JSON object.
+	 * @return the JSON object
+	 */
+	public abstract JSONObject toJSON();
 	
 	
 	public Long getmTimeStamp() {
