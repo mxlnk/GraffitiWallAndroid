@@ -12,7 +12,17 @@
 	    android:textColor="#FFFFFF"
 	    android:layout_marginLeft="15dp"
 	    android:layout_marginRight="15dp 	"
+	    android:layout_marginBottom="5dp"
+   	    android:layout_marginTop="5dp"
 	    />
+	
+	<View
+        android:layout_width="fill_parent"
+        android:layout_marginRight="33dp"
+        android:layout_marginLeft="33dp"
+        android:layout_height="1dip"        
+        android:background="#FFFFFF"        
+         />
     
     
 </RelativeLayout>

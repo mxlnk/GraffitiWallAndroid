@@ -7,8 +7,16 @@
     tools:ignore="MergeRootFrame"
     android:background="@drawable/chalkboard_black" >
 
-    
+     <View
+        android:layout_width="fill_parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_height="1dip"        
+        android:background="#FFFFFF"        
+         />
+     
     <ListView 
+        android:layout_marginTop="7dp"
         android:id="@+id/lv_wall_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,7 +41,7 @@
             android:contentDescription="@string/content_desc_take_pictrue"
             android:layout_width="0dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/camera_white"
             android:background="@color/transparent"
             android:layout_weight="1"            
             android:layout_gravity="center"
@@ -45,7 +53,7 @@
             android:contentDescription="@string/content_desc_write_comment"
             android:layout_width="0dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/comment_speech_bubble_white"
             android:background="@color/transparent"
             android:layout_weight="1"
             android:layout_gravity="center"

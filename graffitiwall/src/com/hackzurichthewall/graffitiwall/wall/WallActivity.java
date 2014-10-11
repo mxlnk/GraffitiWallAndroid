@@ -11,11 +11,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.BeaconManager;
@@ -30,6 +32,9 @@ import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.Conten
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
+
+import com.hackzurichthewall.utils.FontFactory;
+
 
 /**
  * This is the main activity. Basically contains a list with the last posted
@@ -74,6 +79,10 @@ public class WallActivity extends Activity {
 
 		Log.i(TAG, "created wall with Stream: " + STREAM);
 		
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(R.layout.layout_actionbar);
+		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_title);
+		actionBarTitleTv.setTypeface(FontFactory.getTypeface_NexaRustScriptL0(this));
 		setContentView(R.layout.activity_wall); // setting content view to
 												// default layout
 
