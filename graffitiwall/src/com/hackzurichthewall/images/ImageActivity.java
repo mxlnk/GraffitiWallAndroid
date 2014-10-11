@@ -24,6 +24,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -62,6 +63,11 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		this.getWindow().getDecorView()
+		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		
 		setContentView(R.layout.activity_image);
 		
 		// setting up the dialog for uploading

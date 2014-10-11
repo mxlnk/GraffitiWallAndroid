@@ -1,6 +1,5 @@
 package com.hackzurichthewall.graffitiwall.wall;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -11,10 +10,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -31,7 +30,6 @@ import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.Conten
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
-import com.hackzurichthewall.model.TextComment;
 
 /**
  * This is the main activity. Basically contains a list with the last posted
@@ -61,7 +59,13 @@ public class WallActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		this.getWindow().getDecorView()
+		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		
+		
 		if (savedInstanceState != null) {
 			STREAM = savedInstanceState.getInt(STREAM_ID, 731);
 		}
