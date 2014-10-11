@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -31,7 +32,9 @@ import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.Conten
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
+
 import com.hackzurichthewall.utils.FontFactory;
+
 
 /**
  * This is the main activity. Basically contains a list with the last posted
@@ -61,7 +64,13 @@ public class WallActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
+		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+		     WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		this.getWindow().getDecorView()
+		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+		
+		
 		if (savedInstanceState != null) {
 			STREAM = savedInstanceState.getInt(STREAM_ID, 731);
 		}
@@ -129,22 +138,23 @@ public class WallActivity extends Activity {
 				if (result != null) {
 					mListAdapter = new StreamListViewAdapter(getApplicationContext(), R.layout.list_item_comment, items);
 					mCommentList.setAdapter(mListAdapter);
+
+					for (int i = 0; i < items.size(); i++) {
+						AbstractContent item = items.get(i);
+						if (item.getmType() == ContentType.PICTURE_COMMENT) {
+							PictureComment pComment = (PictureComment) item;
+							new DownloadImageTask(pComment) {
+								
+								@Override
+								public void onPostExecute(Bitmap result) {
+									mListAdapter.notifyDataSetChanged();
+									
+								}
+								
+							}.execute(pComment.getmImageUrl());
+						}
 				}
 				
-				for (int i = 0; i < items.size(); i++) {
-					AbstractContent item = items.get(i);
-					if (item.getmType() == ContentType.PICTURE_COMMENT) {
-						PictureComment pComment = (PictureComment) item;
-						new DownloadImageTask(pComment) {
-							
-							@Override
-							public void onPostExecute(Bitmap result) {
-								mListAdapter.notifyDataSetChanged();
-								
-							}
-							
-						}.execute(pComment.getmImageUrl());
-					}
 				}
 				
 				mDialog.dismiss();
