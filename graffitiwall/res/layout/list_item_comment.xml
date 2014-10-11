@@ -17,6 +17,7 @@
 	    />
 	
 	<View
+	    android:layout_alignBottom="@id/tv_comment"
         android:layout_width="fill_parent"
         android:layout_marginRight="33dp"
         android:layout_marginLeft="33dp"
