@@ -1,6 +1,0 @@
-INDEX VERSION 1.126+/home/johannes/dev/hackzurich14/android/.metadata/.plugins/org.eclipse.jdt.core
-137016719.index
-183819139.index
-928187684.index
-1270315800.index
-7576574.index
