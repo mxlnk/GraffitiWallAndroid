@@ -9,14 +9,14 @@
 
      <View
         android:layout_width="fill_parent"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
         android:layout_height="1dip"        
-        android:background="#FFFFFF"
-        android:layout_marginTop="5dp"
+        android:background="#FFFFFF"        
          />
      
     <ListView 
+        android:layout_marginTop="7dp"
         android:id="@+id/lv_wall_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
