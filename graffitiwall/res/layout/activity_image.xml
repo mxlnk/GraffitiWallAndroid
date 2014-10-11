@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/chalkboard_black" >
     
     <ImageView 
         android:id="@+id/iv_image_preview"
@@ -18,24 +19,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_marginBottom="5dp"
         android:layout_alignParentBottom="true"
         android:weightSum="2"
         >
         
-        <ImageButton 
+        <Button 
             android:id="@+id/ib_refresh"
             android:contentDescription="@string/content_desc_take_pictrue"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
+            android:background="@color/transparent"
+            android:text="@string/button_refresh"
+            android:textSize="30sp"
+		    android:gravity="center"	    
+		    android:textColor="#FFFFFF"
+            android:scaleType="center"
             android:layout_weight="1"
             android:layout_gravity="center"
             />
         
-        <ImageButton 
+        <Button 
             android:id="@+id/ib_upload"
             android:contentDescription="@string/content_desc_write_comment"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="80dp"
+            android:text="@string/button_upload"
+            android:background="@color/transparent"
+            android:textSize="30sp"
+		    android:gravity="center"	    
+		    android:textColor="#FFFFFF"
+            android:scaleType="center"
             android:layout_weight="1"
             android:layout_gravity="center"
             />

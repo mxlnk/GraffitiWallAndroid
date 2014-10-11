@@ -6,4 +6,7 @@
     <string name="content_desc_list_item_picture">List entry image.</string>
     <string name="dialog_wait_for_stream">Loading content</string>
     
+    <string name="button_camera">Take picture</string>
+    <string name="button_comment">Write post</string>
+    
 </resources>

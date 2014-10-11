@@ -23,16 +23,20 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.networking.tasks.CreatePostTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.UploadImageTask;
 import com.hackzurichthewall.graffitiwall.wall.WallActivity;
+import com.hackzurichthewall.utils.FontFactory;
 
 /**
  * Activity that allows taking pictures with the camera or loading one from gallery.
@@ -44,11 +48,9 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	private final int REQUEST_CAMERA = 200;
 	private final int SELECT_FILE = 100;
 	
-	private boolean mChooserVisible = false;
 	
-	
-	private ImageButton mRefresh;
-	private ImageButton mUpload;
+	private Button mRefresh;
+	private Button mUpload;
 	private ImageView mPreview;
 	
 	private Bitmap mCurrentImage = null;
@@ -68,6 +70,12 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 		this.getWindow().getDecorView()
 		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 		
+		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+		getActionBar().setCustomView(R.layout.layout_actionbar);
+		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_title);
+		actionBarTitleTv.setTypeface(FontFactory.getTypeface_NexaRustScriptL0(this));
+		
+		
 		setContentView(R.layout.activity_image);
 		
 		// setting up the dialog for uploading
@@ -75,8 +83,12 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 		this.mDialog.setMessage(getString(R.string.dialog_image_upload));
 		this.mDialog.setCancelable(false);
 		
-		this.mRefresh = (ImageButton) findViewById(R.id.ib_refresh);
-		this.mUpload = (ImageButton) findViewById(R.id.ib_upload);
+		this.mRefresh = (Button) findViewById(R.id.ib_refresh);
+		this.mRefresh.setTypeface(FontFactory
+				.getTypeface_NexaRustScriptL0(this));
+		this.mUpload = (Button) findViewById(R.id.ib_upload);
+		this.mUpload.setTypeface(FontFactory
+				.getTypeface_NexaRustScriptL0(this));
 		this.mPreview = (ImageView) findViewById(R.id.iv_image_preview);
 		
 		// setting click listeners
@@ -116,8 +128,6 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		
-		mChooserVisible = false;
 		
 		if (resultCode == RESULT_OK) { // everything ok
 			if (requestCode == REQUEST_CAMERA) { // data from camera
@@ -227,8 +237,6 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 				}
 			}
 		});
-		// setting boolean to be able to return to last activity on back pressed
-		mChooserVisible = true;
 		builder.show();
 	}
 
@@ -236,10 +244,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 
 	@Override
 	public void onBackPressed() {
-		if (mChooserVisible) 
-			finish();
-		
-		super.onBackPressed();
+		finish();
 	}
 	
 	

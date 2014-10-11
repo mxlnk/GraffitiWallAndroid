@@ -6,4 +6,7 @@
     <string name="error_no_image_path">You have not chosen an image yet.</string>
     <string name="dialog_image_upload">Picture is uploading&#8230;</string>
     
+    <string name="button_upload">Upload</string>
+    <string name="button_refresh">Refresh</string>
+    
 </resources>

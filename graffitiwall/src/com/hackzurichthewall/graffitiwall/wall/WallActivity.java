@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBar;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,7 +33,6 @@ import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.Conten
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
-
 import com.hackzurichthewall.utils.FontFactory;
 
 
@@ -55,8 +55,8 @@ public class WallActivity extends Activity {
 
 	private ListView mCommentList;
 	private StreamListViewAdapter mListAdapter;
-	private ImageButton mTakePicture;
-	private ImageButton mWriteComment;
+	private Button mTakePicture;
+	private Button mWriteComment;
 	private List<AbstractContent> items;
 	
 	private ProgressDialog mDialog;
@@ -108,7 +108,9 @@ public class WallActivity extends Activity {
 		
 		updateList();
 
-		this.mTakePicture = (ImageButton) findViewById(R.id.ib_take_picture);
+		this.mTakePicture = (Button) findViewById(R.id.ib_take_picture);
+		this.mTakePicture.setTypeface(FontFactory
+				.getTypeface_NexaRustScriptL0(this));
 		this.mTakePicture.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -117,7 +119,9 @@ public class WallActivity extends Activity {
 			}
 		});
 
-		this.mWriteComment = (ImageButton) findViewById(R.id.ib_write_comment);
+		this.mWriteComment = (Button) findViewById(R.id.ib_write_comment);
+		this.mWriteComment.setTypeface(FontFactory
+				.getTypeface_NexaRustScriptL0(this));
 		this.mWriteComment.setOnClickListener(new View.OnClickListener() {
 
 			@Override
