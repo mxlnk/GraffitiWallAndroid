@@ -66,10 +66,13 @@ public class WallActivity extends Activity {
 		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 		
 		
-		if (savedInstanceState != null) {
-			STREAM = savedInstanceState.getInt(STREAM_ID, 731);
+		if (this.getIntent() != null) {	//hopefully only after 
+			//STREAM = savedInstanceState.getInt(STREAM_ID, 731);
+			STREAM = this.getIntent().getIntExtra(STREAM_ID, 731);
+
 		}
-		
+
+		Log.i(TAG, "created wall with Stream: " + STREAM);
 		
 		setContentView(R.layout.activity_wall); // setting content view to
 												// default layout
