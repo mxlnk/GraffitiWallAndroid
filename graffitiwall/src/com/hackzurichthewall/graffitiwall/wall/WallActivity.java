@@ -129,22 +129,23 @@ public class WallActivity extends Activity {
 				if (result != null) {
 					mListAdapter = new StreamListViewAdapter(getApplicationContext(), R.layout.list_item_comment, items);
 					mCommentList.setAdapter(mListAdapter);
+
+					for (int i = 0; i < items.size(); i++) {
+						AbstractContent item = items.get(i);
+						if (item.getmType() == ContentType.PICTURE_COMMENT) {
+							PictureComment pComment = (PictureComment) item;
+							new DownloadImageTask(pComment) {
+								
+								@Override
+								public void onPostExecute(Bitmap result) {
+									mListAdapter.notifyDataSetChanged();
+									
+								}
+								
+							}.execute(pComment.getmImageUrl());
+						}
 				}
 				
-				for (int i = 0; i < items.size(); i++) {
-					AbstractContent item = items.get(i);
-					if (item.getmType() == ContentType.PICTURE_COMMENT) {
-						PictureComment pComment = (PictureComment) item;
-						new DownloadImageTask(pComment) {
-							
-							@Override
-							public void onPostExecute(Bitmap result) {
-								mListAdapter.notifyDataSetChanged();
-								
-							}
-							
-						}.execute(pComment.getmImageUrl());
-					}
 				}
 				
 				mDialog.dismiss();
