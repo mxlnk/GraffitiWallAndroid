@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -75,7 +77,7 @@ public class ImageActivity extends Activity {
 			}
 		});
 		
-		if (mCurrentImage == null) {
+		if (mCurrentImage == null && savedInstanceState == null) {
 			takePicture();
 		}
 	}
@@ -101,8 +103,12 @@ public class ImageActivity extends Activity {
 					Bitmap bm;
 					BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
 
+					int rotation = getImageOrientation(f.getAbsolutePath());
 					bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
 							btmapOptions);
+					if (rotation != 0) {
+						bm = rotateBitmap(bm, rotation);
+					}
 
 					// bm = Bitmap.createScaledBitmap(bm, 70, 70, true);
 					mPreview.setImageBitmap(bm);
@@ -136,7 +142,11 @@ public class ImageActivity extends Activity {
 				String tempPath = getPath(selectedImageUri, ImageActivity.this);
 				Bitmap bm;
 				BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
+				int rotation = getImageOrientation(tempPath);
 				bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
+				if (rotation != 0) {
+					bm = rotateBitmap(bm, rotation);
+				}
 				this.mCurrentImage = bm;
 				mPreview.setImageBitmap(bm);
 			}
@@ -210,6 +220,44 @@ public class ImageActivity extends Activity {
 		return cursor.getString(column_index);
 	}
 	
+	
+	 private int getImageOrientation(String imagePath){
+	     int rotate = 0;
+	     try {
+
+	         File imageFile = new File(imagePath);
+	         ExifInterface exif = new ExifInterface(
+	                 imageFile.getAbsolutePath());
+	         int orientation = exif.getAttributeInt(
+	                 ExifInterface.TAG_ORIENTATION,
+	                 ExifInterface.ORIENTATION_NORMAL);
+
+	         switch (orientation) {
+	         case ExifInterface.ORIENTATION_ROTATE_270:
+	             rotate = 270;
+	             break;
+	         case ExifInterface.ORIENTATION_ROTATE_180:
+	             rotate = 180;
+	             break;
+	         case ExifInterface.ORIENTATION_ROTATE_90:
+	             rotate = 90;
+	             break;
+	         }
+	     } catch (IOException e) {
+	         e.printStackTrace();
+	     }
+	    return rotate;
+	 }
+	 
+	 
+	 private Bitmap rotateBitmap(Bitmap bmp, int rotation) {
+		 Matrix matrix = new Matrix();
+		 matrix.postRotate(rotation);
+		 Bitmap rotatedBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
+				 									bmp.getHeight(), matrix, true);
+		 bmp.recycle();
+		 return rotatedBitmap;
+	 }
 	
 
 }

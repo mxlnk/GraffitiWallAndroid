@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="title_hint">Enter title&#8230;</string>
+    <string name="comment_hint">Enter comment&#8230;</string>
+    
+    <string name="cancel_comment">Cancel :(</string>
+    <string name="upload_comment">Post!</string>
+</resources>
