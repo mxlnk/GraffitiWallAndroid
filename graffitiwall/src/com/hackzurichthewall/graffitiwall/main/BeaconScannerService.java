@@ -1,6 +1,7 @@
 package com.hackzurichthewall.graffitiwall.main;
 
 import java.util.List;
+
 import android.R;
 import android.app.Notification.Builder;
 import android.app.PendingIntent;
@@ -15,6 +16,7 @@ import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.BeaconManager.MonitoringListener;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
 import com.estimote.sdk.utils.L;
 import com.hackzurichthewall.graffitiwall.wall.WallActivity;
 
@@ -78,8 +80,8 @@ public class BeaconScannerService  extends Service {
 		         */
 		        Log.d(TAG, "startingToMonitor");
 		        
-		        // TODO change for responsiveness?
-		        //GlobalState.beaconManager.setBackgroundScanPeriod(scanPeriodMillis, waitTimeMillis);
+		        // TODO tune 5s atm
+		        GlobalState.beaconManager.setBackgroundScanPeriod(5000, 5000);
 		        
 		        GlobalState.beaconManager.setMonitoringListener(new MonitoringListener() {
 
@@ -92,6 +94,7 @@ public class BeaconScannerService  extends Service {
 						Log.d(TAG, "entered region: " + region);
 						Log.d(TAG, "we found " + beacons.size() + " beacons: " + beacons);
 						Log.d(TAG, "closest one: " + closest);
+						Log.d(TAG, "distance closest: " + Utils.computeAccuracy(closest));
 						
 						// construct notification TODO action, die dann text einfügen etc erlaubt
 						Builder builder = new Builder(BeaconScannerService.this)
