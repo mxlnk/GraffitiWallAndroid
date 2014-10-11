@@ -1,18 +1,17 @@
 package com.hackzurichthewall.graffitiwall.wall;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.NotificationManager;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.estimote.sdk.BeaconManager;
 import com.hackzurichthewall.graffitiwall.R;
@@ -45,6 +44,8 @@ public class WallActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.activity_wall); // setting content view to default layout
+		
+		checkBluetoothConnection();
 		
 		Log.d(TAG, "started");
 		
@@ -79,10 +80,12 @@ public class WallActivity extends Activity {
 		
 	}
 		
-	// TODO stop service probably here
+	
 	@Override
 	protected void onDestroy() {
-		GlobalState.beaconManager.disconnect();
+		// do not disconnect, because otherwise no scan
+		// in background can happen
+//		GlobalState.beaconManager.disconnect();
 		
 		super.onDestroy();
 
@@ -103,5 +106,22 @@ public class WallActivity extends Activity {
 	private void showCommentDialog() {
 		DialogFragment dialog = new UploadCommentFragment();
 		dialog.show(getFragmentManager(), "UploadCommentDialog");
+	}
+	
+	private void checkBluetoothConnection() {
+		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+		if (mBluetoothAdapter == null) {
+		    // Device does not support Bluetooth
+			Toast.makeText(
+					this, "Unfortunatly your device does not support bluetooth.", Toast.LENGTH_LONG)
+						.show();
+		} else {
+		    if (!mBluetoothAdapter.isEnabled()) {
+		        // Bluetooth is not enabled
+		    	Toast.makeText(
+						this, "Please enable bluetooth on your phone.", Toast.LENGTH_LONG)
+							.show();
+		    }
+		}
 	}
 }
