@@ -3,4 +3,7 @@
 
     <string name="content_desc_image_prev">Preview of image to upload.</string>
     <string name="intent_chooser_head">Choose source</string>
+    <string name="error_no_image_path">You have not chosen an image yet.</string>
+    <string name="dialog_image_upload">Picture is uploading&#8230;</string>
+    
 </resources>
