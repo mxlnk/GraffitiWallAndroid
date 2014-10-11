@@ -4,5 +4,6 @@
     <string name="content_desc_take_pictrue">Take picture with camera.</string>
     <string name="content_desc_write_comment">Write comment.</string>
     <string name="content_desc_list_item_picture">List entry image.</string>
+    <string name="dialog_wait_for_stream">Loading content</string>
     
 </resources>

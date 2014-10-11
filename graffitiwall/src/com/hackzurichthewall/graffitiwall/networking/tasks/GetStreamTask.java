@@ -1,6 +1,8 @@
 package com.hackzurichthewall.graffitiwall.networking.tasks;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -11,10 +13,14 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
 import com.hackzurichthewall.graffitiwall.networking.RestClient;
+import com.hackzurichthewall.model.AbstractContent;
+import com.hackzurichthewall.model.PictureComment;
+import com.hackzurichthewall.model.TextComment;
 
 
 /**
@@ -23,20 +29,22 @@ import com.hackzurichthewall.graffitiwall.networking.RestClient;
  * 
  * @author Johannes Glöckle
  */
-public class GetStreamTask extends AsyncTask<Integer, Void, JSONArray> {
+public class GetStreamTask extends AsyncTask<Integer, Void, List<AbstractContent>> {
 
 	private String mPath = null;
 	
+	private final int limit = 100;
+	
 	
 	@Override
-	protected JSONArray doInBackground(Integer... params) {
+	protected List<AbstractContent> doInBackground(Integer... params) {
 		
 		if (params == null || params.length == 0) { // checking if stream ID is given
 			throw new IllegalArgumentException("At least a stream ID has to be provided.");
 		}
 		
 		// creating the path to make GET-request
-		mPath = RestClient.URL + "/streams/" + params[0].toString() + "/posts" + RestClient.API_KEY;
+		mPath = RestClient.URL + "/streams/" + params[0].toString() + "/posts" + RestClient.API_KEY + "&limit=" + limit;
 		
 		
 		// request method is GET
@@ -75,7 +83,26 @@ public class GetStreamTask extends AsyncTask<Integer, Void, JSONArray> {
 			}
             
           }
-		return respObject;
+        
+        
+        // creating the list with objects
+        ArrayList<AbstractContent> items = new ArrayList<AbstractContent>();
+        
+        for (int i = 0; i < respObject.length(); i++) {
+        	try {
+        		JSONObject current = respObject.getJSONObject(i);
+				if (current.has("photo")) {
+					items.add(new PictureComment(current));
+				} else {
+					items.add(new TextComment(current));
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        
+		return items;
 	}
 
 }

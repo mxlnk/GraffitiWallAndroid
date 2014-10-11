@@ -117,6 +117,11 @@ public class StreamListViewAdapter extends ArrayAdapter<AbstractContent> {
 			convertView.setTag(holder);
 		} else { // old list item is going to be reused
 			holder = (ViewHolder) convertView.getTag();
+			
+			// checking if not could be found by tag
+			if (holder == null) {
+				holder = new ViewHolder();
+			}
 			switch (getItemViewType(position)) {
 			case 0: // usual text comment
 				if (holder.mCommentTxt == null) {
@@ -132,6 +137,7 @@ public class StreamListViewAdapter extends ArrayAdapter<AbstractContent> {
 				break;
 			case 1: // picture comment
 				if (holder.mPicture == null) {
+					holder = new ViewHolder();
 					convertView = mInflater.inflate(R.layout.list_item_picture,
 							null);
 					holder.setmPicture((ImageView) convertView
