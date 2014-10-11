@@ -1,16 +1,16 @@
 package com.hackzurichthewall.graffitiwall.wall;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.estimote.sdk.Beacon;
@@ -21,9 +21,7 @@ import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.main.BeaconConstants;
 import com.hackzurichthewall.graffitiwall.main.GlobalState;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
-import com.hackzurichthewall.model.AbstractContent;
-import com.hackzurichthewall.model.PictureComment;
-import com.hackzurichthewall.model.TextComment;
+import com.hackzurichthewall.images.ImageActivity;
 
 
 /**
@@ -41,6 +39,7 @@ public class WallActivity extends Activity {
 	
 	private ListView mCommentList;
 	private StreamListViewAdapter mListAdapter;
+	private ImageButton mTakePicture;
 	
 	
 	private NotificationManager notificationManager;
@@ -56,24 +55,15 @@ public class WallActivity extends Activity {
 		this.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		 
 		this.mCommentList = (ListView) findViewById(R.id.lv_wall_list);
-		
-		
-		// TODO erase if working.
-		ArrayList<AbstractContent> comments = new ArrayList<AbstractContent>(4);
-		for (int i = 0; i < 4; i++) {
-			TextComment comment = new TextComment();
-			comment.setComment("Comment " + i);
-			comments.add(comment);
-			PictureComment pComment = new PictureComment();
-			Bitmap bmp = BitmapFactory.decodeResource(this.getResources(),
-                    R.drawable.ic_launcher);
-			pComment.setmPicture(bmp);
-			comments.add(pComment);
-		}
-		
-		// setting the list adapter and connect it with the list
-		this.mListAdapter = new StreamListViewAdapter(this, R.layout.list_item_comment, comments);
-		this.mCommentList.setAdapter(mListAdapter);
+	
+		this.mTakePicture = (ImageButton) findViewById(R.id.ib_take_picture);
+		this.mTakePicture.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				openCamera();
+			}
+		});
 		
 		// ranging: find out distance to device
 		GlobalState.beaconManager.setRangingListener(new BeaconManager.RangingListener() {
@@ -130,5 +120,12 @@ public class WallActivity extends Activity {
 		super.onDestroy();
 		GlobalState.beaconManager.disconnect();
 	}
-
+	
+	/**
+	 * Opens the camera.
+	 */
+	private void openCamera() {
+		Intent intent = new Intent(this, ImageActivity.class);
+		startActivity(intent);
+	}
 }

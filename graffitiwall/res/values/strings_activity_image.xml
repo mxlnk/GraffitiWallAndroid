@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="content_desc_image_prev">Preview of image to upload.</string>
+    <string name="intent_chooser_head">Choose source</string>
+</resources>
