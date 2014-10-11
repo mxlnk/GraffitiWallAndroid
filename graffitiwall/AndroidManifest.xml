@@ -8,6 +8,16 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="21" />
 
+    <!-- Needed permissions in order to scan for beacons. -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    
+    <!-- Declaration that this app is usable on phones with Bluetooth Low Energy. -->
+    <uses-feature
+        android:name="android.hardware.bluetooth_le"
+        android:required="true" />
+    
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,6 +32,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- Estimote service responsible for scanning beacons. -->
+        <service
+            android:name="com.estimote.sdk.service.BeaconService"
+            android:exported="false" />
     </application>
 
 </manifest>
