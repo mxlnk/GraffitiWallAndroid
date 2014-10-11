@@ -1,5 +1,9 @@
 package com.hackzurichthewall.model;
 
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.graphics.Bitmap;
@@ -17,6 +21,7 @@ import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.ViewHo
 public class PictureComment extends AbstractContent {
 
 	private Bitmap mPicture;
+	private String mImageUrl;
 	
 	
 	/**
@@ -36,8 +41,25 @@ public class PictureComment extends AbstractContent {
 	
 	@Override
 	public JSONObject toJSON() {
-		// TODO Auto-generated method stub
-		return null;
+		JSONObject result = new JSONObject();
+		
+		try {
+			JSONObject photo = new JSONObject();
+			photo.put("url", mImageUrl);
+		
+			JSONArray photos = new JSONArray();
+			photos.put(photo);
+			result.put("text", ".");
+			result.put("title", ".");
+		
+			result.put("photos", photos);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return result;
+
 	}
 
 	
@@ -54,6 +76,22 @@ public class PictureComment extends AbstractContent {
 	 */
 	public void setmPicture(Bitmap mPicture) {
 		this.mPicture = mPicture;
+	}
+
+
+	/**
+	 * @return the mImageUrl
+	 */
+	public String getmImageUrl() {
+		return mImageUrl;
+	}
+
+
+	/**
+	 * @param mImageUrl the mImageUrl to set
+	 */
+	public void setmImageUrl(String mImageUrl) {
+		this.mImageUrl = mImageUrl;
 	}
 
 
