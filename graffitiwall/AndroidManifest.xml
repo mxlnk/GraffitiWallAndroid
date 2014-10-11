@@ -38,7 +38,8 @@
         
         <activity
             android:name="com.hackzurichthewall.images.ImageActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <meta-data
             	android:name="android.support.PARENT_ACTIVITY"
             	android:value="com.hackzurichthewall.graffitiwall.wall.WallActivity" />
