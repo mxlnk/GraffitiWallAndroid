@@ -18,6 +18,8 @@ import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.BeaconManager.MonitoringListener;
 import com.estimote.sdk.Region;
 import com.hackzurichthewall.graffitiwall.R;
+import com.hackzurichthewall.graffitiwall.main.BeaconConstants;
+import com.hackzurichthewall.graffitiwall.main.GlobalState;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
@@ -34,14 +36,13 @@ public class WallActivity extends Activity {
 
 	public static final String TAG = "WALL_ACTIVITY";
 	
-	//not sure if needed..
-	private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
-	private static final Region ALL_ESTIMOTE_BEACONS = new Region("regionId", ESTIMOTE_PROXIMITY_UUID, null, null);
+	
+	
 	
 	private ListView mCommentList;
 	private StreamListViewAdapter mListAdapter;
 	
-	private BeaconManager beaconManager;
+	
 	private NotificationManager notificationManager;
 
 	@Override
@@ -51,7 +52,7 @@ public class WallActivity extends Activity {
 		setContentView(R.layout.activity_wall); // setting content view to default layout
 		
 		// initialize
-		this.beaconManager = new BeaconManager(this);
+		GlobalState.beaconManager = new BeaconManager(this);
 		this.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		 
 		this.mCommentList = (ListView) findViewById(R.id.lv_wall_list);
@@ -75,14 +76,14 @@ public class WallActivity extends Activity {
 		this.mCommentList.setAdapter(mListAdapter);
 		
 		// ranging: find out distance to device
-		beaconManager.setRangingListener(new BeaconManager.RangingListener() {
+		GlobalState.beaconManager.setRangingListener(new BeaconManager.RangingListener() {
 		  @Override public void onBeaconsDiscovered(Region region, List<Beacon> beacons) {
 		    Log.d(TAG, "Ranged beacons: " + beacons);
 		  }
 		});
 		
 		// monitoring: scan for beacons periodically, change default scan intervall for more responsiveness
-		beaconManager.setMonitoringListener(new MonitoringListener() {
+		GlobalState.beaconManager.setMonitoringListener(new MonitoringListener() {
 
 			@Override
 			public void onEnteredRegion(Region region, List<Beacon> beacons) {
@@ -101,10 +102,10 @@ public class WallActivity extends Activity {
 		super.onStart();
 		
 		// Should be invoked in #onStart.
-		beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
+		GlobalState.beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
 		  @Override public void onServiceReady() {
 		    try {
-		      beaconManager.startRanging(ALL_ESTIMOTE_BEACONS);
+		    	GlobalState.beaconManager.startRanging(BeaconConstants.ALL_ESTIMOTE_BEACONS);
 		    } catch (RemoteException e) {
 		      Log.e(TAG, "Cannot start ranging", e);
 		    }
@@ -118,7 +119,7 @@ public class WallActivity extends Activity {
 		
 		// Should be invoked in #onStop.
 		try {
-		  beaconManager.stopRanging(ALL_ESTIMOTE_BEACONS);
+			GlobalState.beaconManager.stopRanging(BeaconConstants.ALL_ESTIMOTE_BEACONS);
 		} catch (RemoteException e) {
 		  Log.e("foo", "Cannot stop but it does not matter now", e);
 		}
@@ -127,7 +128,7 @@ public class WallActivity extends Activity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		this.beaconManager.disconnect();
+		GlobalState.beaconManager.disconnect();
 	}
 
 }
