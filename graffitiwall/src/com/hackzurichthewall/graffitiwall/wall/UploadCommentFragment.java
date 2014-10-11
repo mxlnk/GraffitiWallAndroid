@@ -8,11 +8,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.networking.tasks.CreatePostTask;
-import com.hackzurichthewall.model.PictureComment;
 import com.hackzurichthewall.model.TextComment;
 
 
@@ -44,16 +44,7 @@ public class UploadCommentFragment extends DialogFragment {
 	    // Add action buttons
 	           .setPositiveButton(R.string.upload_comment, new DialogInterface.OnClickListener() {
 	               @Override
-	               public void onClick(DialogInterface dialog, int id) {
-	            	   
-	            	   TextComment txtComment = new TextComment();
-	            	   txtComment.setComment(etComment.getText().toString());
-	            	   txtComment.setmTitle(etTitle.getText().toString());
-	            	 
-	            	   CreatePostTask task = new CreatePostTask();
-	            	   task.setmStreamId(731);
-	            	   task.execute(txtComment.toJSON());
-	                   
+	               public void onClick(DialogInterface dialog, int id) { // nothing to do becaus will be overwritten
 	               }
 	           })
 	           .setNegativeButton(R.string.cancel_comment, new DialogInterface.OnClickListener() {
@@ -63,6 +54,50 @@ public class UploadCommentFragment extends DialogFragment {
 	           });      
 	    
 	    return builder.create();
+	}
+
+
+	@Override
+	public void onStart() {
+		super.onStart();    //super.onStart() is where dialog.show() is actually called on the underlying dialog, so we have to do it after this point
+	    AlertDialog d = (AlertDialog)getDialog();
+	    if(d != null)
+	    {
+	        Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
+	        positiveButton.setOnClickListener(new View.OnClickListener()
+	                {
+	                    @Override
+	                    public void onClick(View v)
+	                    {
+	                    	// checking the title input field
+	                    	 if (etTitle.getText().toString().length() == 0) {
+                    		 	 etTitle.setError(getString(R.string.error_emtpy));
+	  	            		   	 return;
+							 } else {
+								 etTitle.setError(null);
+							 }
+							 
+							// checking the comment field   
+							 if (etComment.getText().toString().length() == 0) {
+								 etComment.setError(getString(R.string.error_emtpy));
+								 return;
+							 } else {
+								 etComment.setError(null);
+							 }
+							
+							 // finally creating the comment
+							 TextComment txtComment = new TextComment();
+							 txtComment.setComment(etComment.getText().toString());
+							 txtComment.setmTitle(etTitle.getText().toString());
+							 
+							 // and loading it up
+							 CreatePostTask task = new CreatePostTask();
+							 task.setmStreamId(731);
+							 task.execute(txtComment.toJSON());
+							 dismiss();
+            			}
+	                });
+	    }
 	}
 
 	
