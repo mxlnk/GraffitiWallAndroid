@@ -45,6 +45,7 @@ public class BeaconConstants {
 			for (Beacon beacon : beaconsInRange) {
 				double currentDistance = Utils.computeAccuracy(beacon);
 				Log.i(TAG, "Beacon found with distance: " + currentDistance);
+				Log.i(TAG, "and proximity: " + Utils.computeProximity(beacon));
 				if (currentDistance < currentClosestDistance) {
 					closestBeacon = beacon;
 					currentClosestDistance = currentDistance;

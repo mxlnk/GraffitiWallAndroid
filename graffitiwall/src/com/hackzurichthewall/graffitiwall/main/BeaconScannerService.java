@@ -84,7 +84,7 @@ public class BeaconScannerService  extends Service {
 		        Log.d(TAG, "startingToMonitor");
 		        
 		        // TODO tune 5s atm
-		        GlobalState.beaconManager.setBackgroundScanPeriod(1000, 1000);
+		        GlobalState.beaconManager.setBackgroundScanPeriod(2000, 0);
 		        
 		        GlobalState.beaconManager.setMonitoringListener(new MonitoringListener() {
 
@@ -93,7 +93,7 @@ public class BeaconScannerService  extends Service {
 					public void onEnteredRegion(Region region, List<Beacon> beacons) {
 						// TODO check if user is already hooked up, was vernünftiges für ids/cancellation einfallen lassen
 						// find closest one
-						Beacon closest = BeaconConstants.closestBeacon(beacons, 2);
+						Beacon closest = BeaconConstants.closestBeacon(beacons, 200);
 						
 						if (closest != null) {
 							Log.i(TAG, "entered region: " + region);
@@ -107,6 +107,12 @@ public class BeaconScannerService  extends Service {
 							
 						} else {
 							Log.e(TAG, "Nearest beacon is not near enough.");
+							/*try {
+								Thread.sleep(2000);
+							} catch (InterruptedException e) {
+								Log.e(TAG, "could not sleep", e);
+							}*/
+							startMonitoring();
 						}
 						
 						
@@ -156,7 +162,7 @@ public class BeaconScannerService  extends Service {
 	 * 		the button which is the closest of all detected beacons
 	 */
 	private void showNotification(Beacon closestBeacon) {
-		// construct notification TODO action, die dann text einfügen etc erlaubt
+		// construct notification
 		Builder builder = new Builder(BeaconScannerService.this)
 		.setContentTitle("much notification")
 		.setContentText("very proximity, wow")
