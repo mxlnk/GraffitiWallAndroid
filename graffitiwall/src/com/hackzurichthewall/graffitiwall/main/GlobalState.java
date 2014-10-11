@@ -1,7 +1,7 @@
 package com.hackzurichthewall.graffitiwall.main;
 
 import android.app.Application;
-
+import android.app.NotificationManager;
 import com.estimote.sdk.BeaconManager;
 
 /**
@@ -17,5 +17,7 @@ public class GlobalState extends Application {
 	
 	
 	public static BeaconManager beaconManager;
+
+	public static NotificationManager notifier;
 
 }

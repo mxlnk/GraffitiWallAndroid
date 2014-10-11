@@ -5,7 +5,7 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
     <!-- Needed permissions in order to scan for beacons. -->
@@ -37,6 +37,7 @@
         <service
             android:name="com.estimote.sdk.service.BeaconService"
             android:exported="false" />
+         <service android:enabled="true" android:name="com.hackzurichthewall.graffitiwall.main.BeaconScannerService" />
     </application>
 
 </manifest>
