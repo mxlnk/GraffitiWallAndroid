@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.networking.tasks.CreatePostTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.UploadImageTask;
+import com.hackzurichthewall.graffitiwall.wall.WallActivity;
 
 /**
  * Activity that allows taking pictures with the camera or loading one from gallery.
@@ -52,12 +54,20 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	private String mCurrentPath = null;
 	
 	
+	ProgressDialog mDialog;
+	
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_image);
+		
+		// setting up the dialog for uploading
+		this.mDialog = new ProgressDialog(this);
+		this.mDialog.setMessage(getString(R.string.dialog_image_upload));
+		this.mDialog.setCancelable(false);
 		
 		this.mRefresh = (ImageButton) findViewById(R.id.ib_refresh);
 		this.mUpload = (ImageButton) findViewById(R.id.ib_upload);
@@ -75,6 +85,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 		});
 		
 		
+		// listener for upload
 		mUpload.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -83,6 +94,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 					Toast.makeText(getApplicationContext(), getString(R.string.error_no_image_path), 
 											Toast.LENGTH_LONG).show();
 				} else {
+					mDialog.show();
 					uploadImage();
 				}
 				
@@ -101,8 +113,8 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 		
 		mChooserVisible = false;
 		
-		if (resultCode == RESULT_OK) {
-			if (requestCode == REQUEST_CAMERA) {
+		if (resultCode == RESULT_OK) { // everything ok
+			if (requestCode == REQUEST_CAMERA) { // data from camera
 				File f = new File(Environment.getExternalStorageDirectory()
 						.toString());
 				for (File temp : f.listFiles()) {
@@ -112,6 +124,8 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 					}
 				}
 				try {
+					
+					// getting the bitmap
 					Bitmap bm;
 					BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
 
@@ -119,7 +133,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 					bm = BitmapFactory.decodeFile(f.getAbsolutePath(),
 							btmapOptions);
 					if (rotation != 0) {
-						bm = rotateBitmap(bm, rotation);
+						bm = rotateBitmap(bm, rotation); // rotating if necessary
 					}
 					
 					// setting the file path to be able tu upload the image
@@ -151,16 +165,16 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			} else if (requestCode == SELECT_FILE) {
+			} else if (requestCode == SELECT_FILE) { // if data from gallery
 				Uri selectedImageUri = data.getData();
 
 				String tempPath = getPath(selectedImageUri, ImageActivity.this);
-				Bitmap bm;
+				Bitmap bm; // getting the bitmap
 				BitmapFactory.Options btmapOptions = new BitmapFactory.Options();
 				int rotation = getImageOrientation(tempPath);
 				bm = BitmapFactory.decodeFile(tempPath, btmapOptions);
 				if (rotation != 0) {
-					bm = rotateBitmap(bm, rotation);
+					bm = rotateBitmap(bm, rotation); // rotating if necessary
 				}
 				
 				// saving the image's path
@@ -168,7 +182,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 				
 				
 				this.mCurrentImage = bm;
-				mPreview.setImageBitmap(bm);
+				mPreview.setImageBitmap(bm); // showing the bitmap
 			}
 		}
 		
@@ -182,6 +196,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 		final CharSequence[] items = { "Take Photo", "Choose from Library",
 		"Cancel" };
 
+		// creates a dialog containing the list of possible intents
 		AlertDialog.Builder builder = new AlertDialog.Builder(ImageActivity.this);
 		builder.setTitle("Add Photo!");
 		builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -212,9 +227,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	}
 
 
-	/* (non-Javadoc)
-	 * @see android.app.Activity#onBackPressed()
-	 */
+
 	@Override
 	public void onBackPressed() {
 		if (mChooserVisible) 
@@ -240,28 +253,31 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 		return cursor.getString(column_index);
 	}
 	
-	
-	 private int getImageOrientation(String imagePath){
-	     int rotate = 0;
-	     try {
+	/**
+	 * Gets the orientation of an image. Therefore reads exif data.
+	 * @param imagePath path of image
+	 * @return angle in degrees
+	 */
+	private int getImageOrientation(String imagePath){
+	    int rotate = 0;
+	    try {
+	    	File imageFile = new File(imagePath);
+	    	ExifInterface exif = new ExifInterface(
+    			imageFile.getAbsolutePath());
+	        int orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL);
 
-	         File imageFile = new File(imagePath);
-	         ExifInterface exif = new ExifInterface(
-	                 imageFile.getAbsolutePath());
-	         int orientation = exif.getAttributeInt(
-	                 ExifInterface.TAG_ORIENTATION,
-	                 ExifInterface.ORIENTATION_NORMAL);
-
-	         switch (orientation) {
-	         case ExifInterface.ORIENTATION_ROTATE_270:
-	             rotate = 270;
-	             break;
-	         case ExifInterface.ORIENTATION_ROTATE_180:
-	             rotate = 180;
-	             break;
-	         case ExifInterface.ORIENTATION_ROTATE_90:
-	             rotate = 90;
-	             break;
+	        switch (orientation) {
+	        case ExifInterface.ORIENTATION_ROTATE_270:
+        		rotate = 270;
+    			break;
+	        case ExifInterface.ORIENTATION_ROTATE_180:
+        		rotate = 180;
+        		break;
+	        case ExifInterface.ORIENTATION_ROTATE_90:
+	        	rotate = 90;
+	        	break;
 	         }
 	     } catch (IOException e) {
 	         e.printStackTrace();
@@ -270,26 +286,47 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	 }
 	 
 	 
-	 private Bitmap rotateBitmap(Bitmap bmp, int rotation) {
-		 Matrix matrix = new Matrix();
-		 matrix.postRotate(rotation);
-		 Bitmap rotatedBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
+	/**
+	 * Rotates a given bitmap. Rotation is given in degree.
+	 * @param bmp bitmap to rotate
+	 * @param rotation degrees
+	 * @return rotated bitmap
+	 */
+	private Bitmap rotateBitmap(Bitmap bmp, int rotation) {
+		Matrix matrix = new Matrix();
+		matrix.postRotate(rotation);
+		Bitmap rotatedBitmap = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(),
 				 									bmp.getHeight(), matrix, true);
-		 bmp.recycle();
-		 return rotatedBitmap;
-	 }
+		bmp.recycle();
+		return rotatedBitmap;
+	}
 
 
-	 private void uploadImage() {
-		 new UploadImageTask(this).execute(mCurrentPath);
-	 }
+	/**
+	 * Uploads an file with path stored in mCurrentPath.
+	 */
+	private void uploadImage() {
+		new UploadImageTask(this).execute(mCurrentPath);
+	}
 	 
 	 
 	 @Override
 	 public void uploadPost(JSONObject post) {
-		 CreatePostTask task = new CreatePostTask();
+		 CreatePostTask task = new CreatePostTask() {
+
+			@Override
+			protected void onPostExecute(Void result) {
+				super.onPostExecute(result);
+				
+				// dismissing the dialog...
+				mDialog.dismiss();
+				// ... and finishing the activity.
+				finish();
+			}
+			 
+		 };
 		
-		 task.setmStreamId(731);
+		 task.setmStreamId(WallActivity.STREAM);
 		
 		 task.execute(post);
 	 }

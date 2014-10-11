@@ -3,25 +3,16 @@ package com.hackzurichthewall.graffitiwall.networking.tasks;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
-import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.util.Base64;
 
 import com.hackzurichthewall.graffitiwall.networking.RestClient;
-import com.hackzurichthewall.model.PictureComment;
 
 public class CreatePostTask extends AsyncTask<JSONObject, Void, Void> {
 
@@ -67,29 +58,7 @@ public class CreatePostTask extends AsyncTask<JSONObject, Void, Void> {
 	    
 
 	    //Handles what is returned from the page 
-	    ResponseHandler<?> responseHandler = new BasicResponseHandler() {
-	    	@Override
-			public String handleResponse(HttpResponse response)
-					throws HttpResponseException, IOException {
-	    		
-	    		String msg = response.getStatusLine().getReasonPhrase();
-	    		
-	    		HttpEntity entity = response.getEntity();
-	    		
-	    		if (entity != null) {
-	    			try {
-						JSONObject obj = new JSONObject(EntityUtils.toString(entity));
-						String s = obj.toString();
-					} catch (ParseException | JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-	    		}
-	    		
-	    		return msg;
-	    	
-	    	}
-	    };
+	    ResponseHandler<?> responseHandler = new BasicResponseHandler();
 	    try {
 			httpclient.execute(httpost, responseHandler);
 		} catch (IOException e) {

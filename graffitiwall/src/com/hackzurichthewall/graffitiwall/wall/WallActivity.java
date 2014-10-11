@@ -16,24 +16,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.estimote.sdk.BeaconManager;
 import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.main.BeaconScannerService;
 import com.hackzurichthewall.graffitiwall.main.GlobalState;
-
 import com.hackzurichthewall.graffitiwall.networking.tasks.ChallengeTask;
-
-
-
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.images.ImageActivity;
 import com.hackzurichthewall.model.AbstractContent;
 import com.hackzurichthewall.model.PictureComment;
 import com.hackzurichthewall.model.TextComment;
-import com.hackzurichthewall.utils.FontFactory;
 
 /**
  * This is the main activity. Basically contains a list with the last posted
@@ -47,6 +41,10 @@ public class WallActivity extends Activity {
 	public static final String TAG = WallActivity.class.getSimpleName();
 
 	public static final String STREAM_ID = "streamID";
+	
+	// default stream if no other found
+	public static int STREAM = 731;
+	
 
 	private ListView mCommentList;
 	private StreamListViewAdapter mListAdapter;
@@ -57,6 +55,11 @@ public class WallActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		if (savedInstanceState != null) {
+			STREAM = savedInstanceState.getInt(STREAM_ID, 731);
+		}
+		
+		
 		setContentView(R.layout.activity_wall); // setting content view to
 												// default layout
 
