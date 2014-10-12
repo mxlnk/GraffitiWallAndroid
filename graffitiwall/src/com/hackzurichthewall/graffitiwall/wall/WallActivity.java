@@ -182,7 +182,7 @@ public class WallActivity extends Activity {
 	 * Shows the "Comment-Dialog" that allows to upload comments.
 	 */
 	private void showCommentDialog() {
-		DialogFragment dialog = new UploadCommentFragment();
+		DialogFragment dialog = new UploadCommentFragment(STREAM);
 		dialog.show(getFragmentManager(), "UploadCommentDialog");
 	}
 

@@ -82,7 +82,7 @@ public class ChallengeTask {
 				    
 				    httpPut.setHeader("Authorization", "Basic cGhpbG9ybGFuZG85MkB5YWhvby5kZToxMjM0");
 				    HttpResponse response = httpclient.execute(httpPut);
-				    JSONObject j = new JSONObject(EntityUtils.toString(response.getEntity()));
+				    //JSONObject j = new JSONObject(EntityUtils.toString(response.getEntity()));
 				    
 				    Log.i(TAG, response.toString());
 				  } catch (Exception e) {

@@ -11,7 +11,6 @@ import com.estimote.sdk.Utils;
 public class BeaconConstants {
 
 	private static final String ESTIMOTE_PROXIMITY_UUID = "B9407F30-F5F8-466E-AFF9-25556B57FE6D";
-	// only looking for UUID (atm all estimote beacons)
 	public static final Region ALL_ESTIMOTE_BEACONS_33333 = new Region("bWallEstimote", ESTIMOTE_PROXIMITY_UUID, 33333, null);
 	
 	private static final String IPAD_PROXIMITY_UUID = "8492e75f-4fd6-469d-b132-043fe94921d8";

@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,9 +26,18 @@ import com.hackzurichthewall.model.TextComment;
 @SuppressLint("InflateParams")
 public class UploadCommentFragment extends DialogFragment {
 
-	private EditText etTitle;
+	private static final String TAG = UploadCommentFragment.class.getSimpleName();
+	
+	//private EditText etTitle;
 	private EditText etComment;
+	
+	private int stream; //default
 
+	public UploadCommentFragment(int stream) {
+		super();
+		this.stream = stream;
+	}
+	
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -35,7 +45,7 @@ public class UploadCommentFragment extends DialogFragment {
 	    LayoutInflater inflater = getActivity().getLayoutInflater();
 	    
 	    View rootView = inflater.inflate(R.layout.alert_dialog_layout, null);
-	    etTitle = (EditText) rootView.findViewById(R.id.et_enter_title);
+	    //etTitle = (EditText) rootView.findViewById(R.id.et_enter_title);
 	    etComment = (EditText) rootView.findViewById(R.id.et_enter_comment);
 	    
 	    // Inflate and set the layout for the dialog
@@ -69,6 +79,7 @@ public class UploadCommentFragment extends DialogFragment {
 	                    @Override
 	                    public void onClick(View v)
 	                    {
+	                    	Log.i(TAG, "should comment now..");
 	                    	// title not used
 //	                    	// checking the title input field
 //	                    	 if (etTitle.getText().toString().length() == 0) {
@@ -93,14 +104,11 @@ public class UploadCommentFragment extends DialogFragment {
 							 
 							 // and loading it up
 							 CreatePostTask task = new CreatePostTask();
-							 task.setmStreamId(731);
+							 task.setmStreamId(stream);
 							 task.execute(txtComment.toJSON());
 							 dismiss();
             			}
 	                });
 	    }
 	}
-
-	
-	
 }
