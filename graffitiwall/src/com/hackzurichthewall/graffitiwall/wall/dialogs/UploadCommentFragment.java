@@ -1,4 +1,4 @@
-package com.hackzurichthewall.graffitiwall.wall;
+package com.hackzurichthewall.graffitiwall.wall.dialogs;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;

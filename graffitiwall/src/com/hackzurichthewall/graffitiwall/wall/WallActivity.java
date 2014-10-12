@@ -27,6 +27,7 @@ import com.hackzurichthewall.graffitiwall.networking.services.BeaconScannerServi
 import com.hackzurichthewall.graffitiwall.networking.tasks.ChallengeTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.DownloadImageTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.GetStreamTask;
+import com.hackzurichthewall.graffitiwall.wall.dialogs.UploadCommentFragment;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.ContentType;
 import com.hackzurichthewall.images.ImageActivity;
