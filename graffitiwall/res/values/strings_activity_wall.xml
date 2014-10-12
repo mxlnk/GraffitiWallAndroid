@@ -5,6 +5,8 @@
     <string name="content_desc_write_comment">Write comment.</string>
     <string name="content_desc_list_item_picture">List entry image.</string>
     <string name="dialog_wait_for_stream">Loading content</string>
+    <string name="error_timeout_exceeded">Conntectivity problems. 
+        								Please try to refresh after checking your connection.</string>
     
     <string name="button_camera">Take picture</string>
     <string name="button_comment">Write post</string>

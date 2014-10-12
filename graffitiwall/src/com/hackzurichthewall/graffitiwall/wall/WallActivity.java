@@ -111,11 +111,6 @@ public class WallActivity extends Activity {
 		this.mCommentList = (ListView) findViewById(R.id.lv_wall_list);
 
 		
-		// setting up progress dialog to show loading
-		this.mDialog = new ProgressDialog(this);
-		this.mDialog.setMessage(getString(R.string.dialog_wait_for_stream));
-		this.mDialog.show();
-		
 		updateList();
 
 		
@@ -154,11 +149,28 @@ public class WallActivity extends Activity {
 	 */
 	private void updateList() {
 		
+		// only showing the progress dialog if there are no items, yet
+		if (this.items == null) {
+			// setting up progress dialog to show loading
+			this.mDialog = new ProgressDialog(this);
+			this.mDialog.setMessage(getString(R.string.dialog_wait_for_stream));
+			this.mDialog.show();
+		}
+		
 		// using the usual task but override the onPostExecute method to set the list after thread completion
 		new GetStreamTask() {
 
 			@Override
 			protected void onPostExecute(List<AbstractContent> result) {
+				
+				// checking if download was successful
+				if (isTimeoutExceeded()) {
+					Toast.makeText(getApplicationContext(), getString(R.string.error_timeout_exceeded), 
+								Toast.LENGTH_LONG).show();
+					mDialog.dismiss();
+					return;
+				}
+				
 				items = result;
 				if (result != null) { // checking if there is a list
 					mListAdapter = new StreamListViewAdapter(getApplicationContext(), R.layout.list_item_comment, items);

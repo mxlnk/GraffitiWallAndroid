@@ -35,6 +35,8 @@ public class GetStreamTask extends AsyncTask<Integer, Void, List<AbstractContent
 	
 	private final int limit = 100;
 	
+	private boolean mTimeoutExceeded = false;
+	
 	
 	@Override
 	protected List<AbstractContent> doInBackground(Integer... params) {
@@ -56,11 +58,11 @@ public class GetStreamTask extends AsyncTask<Integer, Void, List<AbstractContent
 		try {
 			httpResponse = httpClient.execute(httpGet);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
+			mTimeoutExceeded = true;
 			e.printStackTrace();
 			return null;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			mTimeoutExceeded = true;
 			e.printStackTrace();
 			return null;
 		}
@@ -105,4 +107,8 @@ public class GetStreamTask extends AsyncTask<Integer, Void, List<AbstractContent
 		return items;
 	}
 
+	
+	public boolean isTimeoutExceeded() {
+		return this.mTimeoutExceeded;
+	}
 }
