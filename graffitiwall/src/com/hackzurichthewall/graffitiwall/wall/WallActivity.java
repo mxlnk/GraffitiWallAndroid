@@ -81,11 +81,20 @@ public class WallActivity extends Activity {
 		
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(R.layout.layout_actionbar);
-		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_title);
+		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_header);
 		actionBarTitleTv.setTypeface(FontFactory.getTypeface_NexaRustScriptL0(this));
 		setContentView(R.layout.activity_wall); // setting content view to
 												// default layout
 
+		findViewById(R.id.ib_actionbar_refresh).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// refresh
+				updateList();
+				
+			}
+		});
 		checkBluetoothConnection();
 
 		Log.d(TAG, "started");

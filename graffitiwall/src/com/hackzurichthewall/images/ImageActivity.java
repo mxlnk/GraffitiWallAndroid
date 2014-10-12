@@ -72,7 +72,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 		
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(R.layout.layout_actionbar);
-		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_title);
+		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_header);
 		actionBarTitleTv.setTypeface(FontFactory.getTypeface_NexaRustScriptL0(this));
 		
 		
