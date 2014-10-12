@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,13 +68,9 @@ public class WallActivity extends Activity {
 		     WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		this.getWindow().getDecorView()
 		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-		
-		
-		if (this.getIntent() != null) {	//hopefully only after 
-			//STREAM = savedInstanceState.getInt(STREAM_ID, 731);
+				
+		if (this.getIntent() != null)
 			STREAM = this.getIntent().getIntExtra(STREAM_ID, 731);
-
-		}
 
 		Log.i(TAG, "created wall with Stream: " + STREAM);
 		
@@ -95,7 +90,6 @@ public class WallActivity extends Activity {
 		GlobalState.notifier = (NotificationManager) this
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		// TODO probably want this on startup, not onCreate
 		this.startService(new Intent(this, BeaconScannerService.class));
 
 		this.mCommentList = (ListView) findViewById(R.id.lv_wall_list);
@@ -160,27 +154,11 @@ public class WallActivity extends Activity {
 								
 							}.execute(pComment.getmImageUrl());
 						}
+					}
 				}
-				
-				}
-				
 				mDialog.dismiss();
 			}
-			
 		}.execute(STREAM);
-		
-		
-		
-	}
-
-	@Override
-	protected void onDestroy() {
-		// do not disconnect, because otherwise no scan
-		// in background can happen
-		// GlobalState.beaconManager.disconnect();
-
-		super.onDestroy();
-
 	}
 
 	/**

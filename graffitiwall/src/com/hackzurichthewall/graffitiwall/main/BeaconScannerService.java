@@ -2,7 +2,6 @@ package com.hackzurichthewall.graffitiwall.main;
 
 import java.util.List;
 
-import android.R;
 import android.app.Notification.Builder;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,12 +11,14 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
+
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.BeaconManager.MonitoringListener;
 import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
 import com.estimote.sdk.utils.L;
+import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.wall.WallActivity;
 
 public class BeaconScannerService  extends Service {
@@ -87,7 +88,8 @@ public class BeaconScannerService  extends Service {
         	@Override
         	public void onServiceReady() {
 				 try {
-					 GlobalState.beaconManager.startMonitoring(BeaconConstants.ALL_ESTIMOTE_BEACONS);
+					 GlobalState.beaconManager.startMonitoring(BeaconConstants.ALL_ESTIMOTE_BEACONS_33333);
+					 GlobalState.beaconManager.startMonitoring(BeaconConstants.IPAD_BEACON);
 				 } catch (RemoteException e) {
 					 Log.d(TAG, "Error while starting monitoring");
 				 }
@@ -112,13 +114,20 @@ public class BeaconScannerService  extends Service {
 		Builder builder = new Builder(BeaconScannerService.this)
 		.setContentTitle("much notification")
 		.setContentText(closestBeacon.getMajor() + " " + closestBeacon.getMinor())
-		.setSmallIcon(R.drawable.ic_notification_overlay) //TODO passendes aussuchen
+		.setSmallIcon(R.drawable.notification)
 		.setAutoCancel(true)
 		.setVibrate(new long[] { 7, 2, 7 , 2}); // TODO imagine fancy pattern and add sound
 		
 		// build intent for notification
 		Intent resultIntent = new Intent(BeaconScannerService.this, WallActivity.class);
-		resultIntent.putExtra(WallActivity.STREAM_ID, closestBeacon.getMinor());
+		
+		//hardcoded for presentation with iPad as iBeacon
+		if (closestBeacon.getProximityUUID().equals(BeaconConstants.IPAD_BEACON.getProximityUUID())
+			&& closestBeacon.getMajor() == BeaconConstants.IPAD_BEACON.getMajor()
+			&& closestBeacon.getMinor() == BeaconConstants.IPAD_BEACON.getMinor())
+			resultIntent.putExtra(WallActivity.STREAM_ID, 737);
+		else
+			resultIntent.putExtra(WallActivity.STREAM_ID, closestBeacon.getMinor());
 		
 		
 		// ensures that you can get back to where you accepted the notification
@@ -128,10 +137,8 @@ public class BeaconScannerService  extends Service {
 		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 		builder.setContentIntent(resultPendingIntent);
 
-		if (GlobalState.notifier == null) {
+		if (GlobalState.notifier == null)
 			GlobalState.notifier  =  (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-		}
 			
 		GlobalState.notifier.notify(0, builder.build());
 		
