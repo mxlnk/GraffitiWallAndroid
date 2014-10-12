@@ -21,6 +21,7 @@ import com.estimote.sdk.utils.L;
 import com.hackzurichthewall.graffitiwall.R;
 import com.hackzurichthewall.graffitiwall.main.BeaconConstants;
 import com.hackzurichthewall.graffitiwall.main.GlobalState;
+import com.hackzurichthewall.graffitiwall.networking.tasks.GetChallengeTask;
 import com.hackzurichthewall.graffitiwall.wall.WallActivity;
 
 public class BeaconScannerService  extends Service {
@@ -111,39 +112,54 @@ public class BeaconScannerService  extends Service {
 	 * @param closestBeacon 
 	 * 		the button which is the closest of all detected beacons
 	 */
-	private void showNotification(Beacon closestBeacon) {
-		// construct notification
-		Builder builder = new Builder(BeaconScannerService.this)
-		.setContentTitle("much notification")
-		.setContentText(closestBeacon.getMajor() + " " + closestBeacon.getMinor())
-		.setSmallIcon(R.drawable.notification)
-		.setAutoCancel(true)
-		.setVibrate(new long[] { 7, 2, 7 , 2}); // TODO imagine fancy pattern and add sound
+	private void showNotification(final Beacon closestBeacon) {
 		
-		// build intent for notification
-		Intent resultIntent = new Intent(BeaconScannerService.this, WallActivity.class);
-		
-		//hardcoded for presentation with iPad as iBeacon
-		if (closestBeacon.getProximityUUID().equals(BeaconConstants.IPAD_BEACON.getProximityUUID())
-			&& closestBeacon.getMajor() == BeaconConstants.IPAD_BEACON.getMajor()
-			&& closestBeacon.getMinor() == BeaconConstants.IPAD_BEACON.getMinor())
-			resultIntent.putExtra(WallActivity.STREAM_ID, 737);
-		else
-			resultIntent.putExtra(WallActivity.STREAM_ID, closestBeacon.getMinor());
-		
-		
-		// ensures that you can get back to where you accepted the notification
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(BeaconScannerService.this);
-		stackBuilder.addParentStack(WallActivity.class);
-		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-		builder.setContentIntent(resultPendingIntent);
+		new GetChallengeTask() {
 
-		if (GlobalState.notifier == null)
-			GlobalState.notifier  =  (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+			@Override
+			protected void onPostExecute(String result) {
+				super.onPostExecute(result);
+				
+				// construct notification
+				Builder builder = new Builder(BeaconScannerService.this)
+				.setContentTitle("much notification")
+				.setContentText(result)
+				.setSmallIcon(R.drawable.notification)
+				.setAutoCancel(true)
+				.setVibrate(new long[] { 7, 2, 7 , 2}); // TODO imagine fancy pattern and add sound
+				
+				// build intent for notification
+				Intent resultIntent = new Intent(BeaconScannerService.this, WallActivity.class);
+				
+				//hardcoded for presentation with iPad as iBeacon
+				if (closestBeacon.getProximityUUID().equals(BeaconConstants.IPAD_BEACON.getProximityUUID())
+					&& closestBeacon.getMajor() == BeaconConstants.IPAD_BEACON.getMajor()
+					&& closestBeacon.getMinor() == BeaconConstants.IPAD_BEACON.getMinor())
+					resultIntent.putExtra(WallActivity.STREAM_ID, 737);
+				else
+					resultIntent.putExtra(WallActivity.STREAM_ID, closestBeacon.getMinor());
+				
+				
+				// ensures that you can get back to where you accepted the notification
+				TaskStackBuilder stackBuilder = TaskStackBuilder.create(BeaconScannerService.this);
+				stackBuilder.addParentStack(WallActivity.class);
+				stackBuilder.addNextIntent(resultIntent);
+				PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+				builder.setContentIntent(resultPendingIntent);
+
+				if (GlobalState.notifier == null)
+					GlobalState.notifier  =  (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+					
+				GlobalState.notifier.notify(0, builder.build());
+				
+				Log.i(TAG, "Notification showed");
+			}
 			
-		GlobalState.notifier.notify(0, builder.build());
+			
+			
+		}.execute(closestBeacon.getMinor());
 		
-		Log.i(TAG, "Notification showed");
+		
+		
 	}
 }
