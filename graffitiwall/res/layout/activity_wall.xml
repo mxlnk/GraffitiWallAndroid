@@ -33,39 +33,33 @@
         android:weightSum="2"
         >
         
-       
-        
-        <Button 
+        <Button
             android:id="@+id/ib_take_picture"
-            android:contentDescription="@string/content_desc_take_pictrue"
             android:layout_width="0dp"
             android:layout_height="80dp"
-            android:src="@drawable/camera_white"
-           
-            android:layout_weight="1"            
             android:layout_gravity="center"
-            android:text="@string/button_camera"
-            android:background="#FF54003D"
-            android:textColor="#FFFFFF"
-            android:textSize="25sp"
-           
-            />
-        
-        <Button 
-            android:id="@+id/ib_write_comment"
-            android:contentDescription="@string/content_desc_write_comment"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:src="@drawable/comment_speech_bubble_white"        
             android:layout_weight="1"
-            android:layout_gravity="center"
-            android:text="@string/button_comment"
-            android:background="#FFC3C00F"
-            android:textSize="25sp"
-            
-           
+            android:background="#FF54003D"
+            android:contentDescription="@string/content_desc_take_pictrue"
+            android:src="@drawable/camera_white"
+            android:text="@string/button_camera"
             android:textColor="#FFFFFF"
-            />
+            android:textSize="25sp"
+            tools:ignore="ButtonStyle" />
+        
+        <Button
+            android:id="@+id/ib_write_comment"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:background="#FFC3C00F"
+            android:contentDescription="@string/content_desc_write_comment"
+            android:src="@drawable/comment_speech_bubble_white"
+            android:text="@string/button_comment"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+            tools:ignore="ButtonStyle" />
         
     </LinearLayout>
 
