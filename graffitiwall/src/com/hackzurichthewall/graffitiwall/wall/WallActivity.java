@@ -22,8 +22,8 @@ import android.widget.Toast;
 
 import com.estimote.sdk.BeaconManager;
 import com.hackzurichthewall.graffitiwall.R;
-import com.hackzurichthewall.graffitiwall.main.BeaconScannerService;
 import com.hackzurichthewall.graffitiwall.main.GlobalState;
+import com.hackzurichthewall.graffitiwall.networking.services.BeaconScannerService;
 import com.hackzurichthewall.graffitiwall.networking.tasks.ChallengeTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.DownloadImageTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.GetStreamTask;
@@ -64,23 +64,29 @@ public class WallActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		// setting up fullscreen mode
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		     WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		this.getWindow().getDecorView()
 		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 				
-		if (this.getIntent() != null)
+		// setting the current stream from given extra
+		if (this.getIntent() != null) {
 			STREAM = this.getIntent().getIntExtra(STREAM_ID, 731);
+		}
 
 		Log.i(TAG, "created wall with Stream: " + STREAM);
 		
+		// customized action bar
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(R.layout.layout_actionbar);
 		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_header);
 		actionBarTitleTv.setTypeface(FontFactory.getTypeface_NexaRustScriptL0(this));
+		
 		setContentView(R.layout.activity_wall); // setting content view to
-												// default layout
 
+		// click listener for refresh button
+		// users got the possibility to see the newest posts
 		findViewById(R.id.ib_actionbar_refresh).setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -90,6 +96,7 @@ public class WallActivity extends Activity {
 				
 			}
 		});
+		
 		checkBluetoothConnection();
 
 		Log.d(TAG, "started");
@@ -111,6 +118,8 @@ public class WallActivity extends Activity {
 		
 		updateList();
 
+		
+		// setting up the buttons
 		this.mTakePicture = (Button) findViewById(R.id.ib_take_picture);
 		this.mTakePicture.setTypeface(FontFactory
 				.getTypeface_NexaRustScriptL0(this));
@@ -138,14 +147,20 @@ public class WallActivity extends Activity {
 
 	}
 
+	
+	/**
+	 * Updates the list with posts. Therefore fetches them (again) from server. Images will be loaded
+	 * asynchronously in background.
+	 */
 	private void updateList() {
 		
+		// using the usual task but override the onPostExecute method to set the list after thread completion
 		new GetStreamTask() {
 
 			@Override
 			protected void onPostExecute(List<AbstractContent> result) {
 				items = result;
-				if (result != null) {
+				if (result != null) { // checking if there is a list
 					mListAdapter = new StreamListViewAdapter(getApplicationContext(), R.layout.list_item_comment, items);
 					mCommentList.setAdapter(mListAdapter);
 
@@ -167,7 +182,7 @@ public class WallActivity extends Activity {
 				}
 				mDialog.dismiss();
 			}
-		}.execute(STREAM);
+		}.execute(STREAM); // executing with the current stream ID
 	}
 
 	/**
@@ -186,6 +201,9 @@ public class WallActivity extends Activity {
 		dialog.show(getFragmentManager(), "UploadCommentDialog");
 	}
 
+	/**
+	 * Checks if bluetooth is enabled.
+	 */
 	private void checkBluetoothConnection() {
 		BluetoothAdapter mBluetoothAdapter = BluetoothAdapter
 				.getDefaultAdapter();

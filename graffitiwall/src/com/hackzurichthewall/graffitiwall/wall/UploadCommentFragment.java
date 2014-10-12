@@ -41,7 +41,8 @@ public class UploadCommentFragment extends DialogFragment {
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-	    // Get the layout inflater
+
+		// Get the layout inflater
 	    LayoutInflater inflater = getActivity().getLayoutInflater();
 	    
 	    View rootView = inflater.inflate(R.layout.alert_dialog_layout, null);
@@ -54,7 +55,7 @@ public class UploadCommentFragment extends DialogFragment {
 	    // Add action buttons
 	           .setPositiveButton(R.string.upload_comment, new DialogInterface.OnClickListener() {
 	               @Override
-	               public void onClick(DialogInterface dialog, int id) { // nothing to do becaus will be overwritten
+	               public void onClick(DialogInterface dialog, int id) { // nothing to do because will be overwritten
 	               }
 	           })
 	           .setNegativeButton(R.string.cancel_comment, new DialogInterface.OnClickListener() {
@@ -69,26 +70,22 @@ public class UploadCommentFragment extends DialogFragment {
 
 	@Override
 	public void onStart() {
-		super.onStart();    //super.onStart() is where dialog.show() is actually called on the underlying dialog, so we have to do it after this point
-	    AlertDialog d = (AlertDialog)getDialog();
+		super.onStart();    
+	    AlertDialog d = (AlertDialog) getDialog();
 	    if(d != null)
 	    {
+	    	
+	    	// Overriding the positive button's click listener since it should not always dismiss
+	    	// the dialog. Sometimes it should just set an error.
 	        Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
 	        positiveButton.setOnClickListener(new View.OnClickListener()
 	                {
 	                    @Override
 	                    public void onClick(View v)
 	                    {
+
+	                    	
 	                    	Log.i(TAG, "should comment now..");
-	                    	// title not used
-//	                    	// checking the title input field
-//	                    	 if (etTitle.getText().toString().length() == 0) {
-//                    		 	 etTitle.setError(getString(R.string.error_emtpy));
-//	  	            		   	 return;
-//							 } else {
-//								 etTitle.setError(null);
-//							 }
-							 
 							// checking the comment field   
 							 if (etComment.getText().toString().length() == 0) {
 								 etComment.setError(getString(R.string.error_emtpy));
@@ -100,7 +97,7 @@ public class UploadCommentFragment extends DialogFragment {
 							 // finally creating the comment
 							 TextComment txtComment = new TextComment();
 							 txtComment.setComment(etComment.getText().toString());
-							 txtComment.setmTitle("."); // hardcoded, because title is not used
+							 txtComment.setmTitle("."); // hardcoded, because title is not used but has to be set
 							 
 							 // and loading it up
 							 CreatePostTask task = new CreatePostTask();

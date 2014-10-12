@@ -64,11 +64,13 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		// setting fullscreen up
 		this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 		     WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		this.getWindow().getDecorView()
 		    .setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 		
+		// using customized action bar
 		getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
 		getActionBar().setCustomView(R.layout.layout_actionbar);
 		TextView actionBarTitleTv = (TextView)  findViewById(R.id.tv_actionbar_header);
@@ -128,7 +130,7 @@ public class ImageActivity extends Activity implements UploadImageTask.AsyncResp
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		
-		if (resultCode == RESULT_OK) { // everything ok
+		if (resultCode == RESULT_OK) { // everything ok?
 			if (requestCode == REQUEST_CAMERA) { // data from camera
 				File f = new File(Environment.getExternalStorageDirectory()
 						.toString());

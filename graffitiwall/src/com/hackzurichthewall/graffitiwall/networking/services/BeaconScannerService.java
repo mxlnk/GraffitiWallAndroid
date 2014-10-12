@@ -1,4 +1,4 @@
-package com.hackzurichthewall.graffitiwall.main;
+package com.hackzurichthewall.graffitiwall.networking.services;
 
 import java.util.List;
 
@@ -19,6 +19,8 @@ import com.estimote.sdk.Region;
 import com.estimote.sdk.Utils;
 import com.estimote.sdk.utils.L;
 import com.hackzurichthewall.graffitiwall.R;
+import com.hackzurichthewall.graffitiwall.main.BeaconConstants;
+import com.hackzurichthewall.graffitiwall.main.GlobalState;
 import com.hackzurichthewall.graffitiwall.wall.WallActivity;
 
 public class BeaconScannerService  extends Service {
