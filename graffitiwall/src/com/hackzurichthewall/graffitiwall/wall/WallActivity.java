@@ -3,9 +3,9 @@ package com.hackzurichthewall.graffitiwall.wall;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.NotificationManager;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +27,7 @@ import com.hackzurichthewall.graffitiwall.networking.services.BeaconScannerServi
 import com.hackzurichthewall.graffitiwall.networking.tasks.ChallengeTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.DownloadImageTask;
 import com.hackzurichthewall.graffitiwall.networking.tasks.GetStreamTask;
+import com.hackzurichthewall.graffitiwall.wall.dialogs.TransparentLoadingDialog;
 import com.hackzurichthewall.graffitiwall.wall.dialogs.UploadCommentFragment;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter;
 import com.hackzurichthewall.graffitiwall.wall.list.StreamListViewAdapter.ContentType;
@@ -59,7 +60,7 @@ public class WallActivity extends Activity {
 	private Button mWriteComment;
 	private List<AbstractContent> items;
 	
-	private ProgressDialog mDialog;
+	private Dialog mDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -153,8 +154,7 @@ public class WallActivity extends Activity {
 		// only showing the progress dialog if there are no items, yet
 		if (this.items == null) {
 			// setting up progress dialog to show loading
-			this.mDialog = new ProgressDialog(this);
-			this.mDialog.setMessage(getString(R.string.dialog_wait_for_stream));
+			this.mDialog = new TransparentLoadingDialog(this, R.drawable.chalk_progress);
 			this.mDialog.show();
 		}
 		

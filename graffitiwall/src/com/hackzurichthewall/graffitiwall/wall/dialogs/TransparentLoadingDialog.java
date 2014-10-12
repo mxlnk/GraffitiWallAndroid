@@ -56,7 +56,7 @@ public class TransparentLoadingDialog extends Dialog {
 		RotateAnimation anim = new RotateAnimation(0.0f, 360.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
 		anim.setInterpolator(new LinearInterpolator());
 		anim.setRepeatCount(Animation.INFINITE);
-		anim.setDuration(3000);
+		anim.setDuration(2500);
 		iv.setAnimation(anim);
 		iv.startAnimation(anim);
 	}
