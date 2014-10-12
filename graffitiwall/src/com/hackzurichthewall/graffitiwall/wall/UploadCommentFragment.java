@@ -69,13 +69,14 @@ public class UploadCommentFragment extends DialogFragment {
 	                    @Override
 	                    public void onClick(View v)
 	                    {
-	                    	// checking the title input field
-	                    	 if (etTitle.getText().toString().length() == 0) {
-                    		 	 etTitle.setError(getString(R.string.error_emtpy));
-	  	            		   	 return;
-							 } else {
-								 etTitle.setError(null);
-							 }
+	                    	// title not used
+//	                    	// checking the title input field
+//	                    	 if (etTitle.getText().toString().length() == 0) {
+//                    		 	 etTitle.setError(getString(R.string.error_emtpy));
+//	  	            		   	 return;
+//							 } else {
+//								 etTitle.setError(null);
+//							 }
 							 
 							// checking the comment field   
 							 if (etComment.getText().toString().length() == 0) {
@@ -88,7 +89,7 @@ public class UploadCommentFragment extends DialogFragment {
 							 // finally creating the comment
 							 TextComment txtComment = new TextComment();
 							 txtComment.setComment(etComment.getText().toString());
-							 txtComment.setmTitle(etTitle.getText().toString());
+							 txtComment.setmTitle("."); // hardcoded, because title is not used
 							 
 							 // and loading it up
 							 CreatePostTask task = new CreatePostTask();

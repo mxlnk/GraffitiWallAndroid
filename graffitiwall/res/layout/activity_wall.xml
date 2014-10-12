@@ -29,34 +29,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="20dp"
         android:layout_alignParentBottom="true"
         android:weightSum="2"
         >
         
        
         
-        <ImageButton 
+        <Button 
             android:id="@+id/ib_take_picture"
             android:contentDescription="@string/content_desc_take_pictrue"
             android:layout_width="0dp"
             android:layout_height="80dp"
             android:src="@drawable/camera_white"
-            android:background="@color/transparent"
+           
             android:layout_weight="1"            
             android:layout_gravity="center"
-            
+            android:text="@string/button_camera"
+            android:background="#FF54003D"
+            android:textColor="#FFFFFF"
+            android:textSize="25sp"
+           
             />
         
-        <ImageButton 
+        <Button 
             android:id="@+id/ib_write_comment"
             android:contentDescription="@string/content_desc_write_comment"
             android:layout_width="0dp"
             android:layout_height="80dp"
-            android:src="@drawable/comment_speech_bubble_white"
-            android:background="@color/transparent"
+            android:src="@drawable/comment_speech_bubble_white"        
             android:layout_weight="1"
             android:layout_gravity="center"
+            android:text="@string/button_comment"
+            android:background="#FFC3C00F"
+            android:textSize="25sp"
+            
+           
+            android:textColor="#FFFFFF"
             />
         
     </LinearLayout>
