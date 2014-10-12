@@ -47,7 +47,8 @@ public class PictureComment extends AbstractContent {
 	@Override
 	public void fillViewHolder(ViewHolder holder) {
 		ImageView imageView = holder.getmPicture();
-		imageView.setImageBitmap(mPicture);
+		if (mPicture != null)
+			imageView.setImageBitmap(mPicture);
 
 	}
 	
