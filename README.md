@@ -11,5 +11,4 @@ Discover awesome stuff, left there by locals or avoid picking the wrong restaura
 
 Stream of Information based on iBeacon in range.
 
-Android: https://github.com/mxlnk/GraffitiWallAndroid
 iOS: https://github.com/benno208/GraffitiWalliOS
